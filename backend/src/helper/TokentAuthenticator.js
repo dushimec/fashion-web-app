@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export default class TokenAuthenticator {
+class TokenAuthenticator {
     static tokenGenerator(data) {
         const token = jwt.sign(data, process.env.JWT_KEY);
         return token;
@@ -14,8 +14,14 @@ export default class TokenAuthenticator {
         return payload;
     }
 
+    static setTokenInHeaders(res, token) {
+        res.header('Authorization', `Bearer ${token}`);
+    }
+
     signToken(data) {
         const token = jwt.sign(data, process.env.JWT_KEY);
         return token;
     }
 }
+
+export default TokenAuthenticator;

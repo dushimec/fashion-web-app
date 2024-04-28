@@ -33,6 +33,9 @@ class AuthController {
             const { password: _, ...userData } = user.toJSON();
             const token = TokenAuthenticator.tokenGenerator(userData);
             
+            // Set the token in the response headers
+            TokenAuthenticator.setTokenInHeaders(res, token);
+            
             Response.successMessage(res, "Login successful", { token });
         } catch (error) {
             Response.errorMessage(res, "Error occurred while logging in", error); 
