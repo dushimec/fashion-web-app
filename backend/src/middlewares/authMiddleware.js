@@ -1,24 +1,34 @@
-// authMiddleware.js
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
-import Response from "../helper/Response";
 
-dotenv.config();
 
-const authenticate = (req, res, next) => {
-    const token = req.headers.authorization;
+import TokenAuthenticator from '../helper/TokenAuthenticator';
+import Response from '../helper/Response';
+
+const authenticateToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
-        return Response.errorMessage(res, "Authorization token not provided", 401);
+        return Response.errorMessage(res, 'Unauthorized', 401);
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_KEY);
-        req.user = decoded; // Attach user data to the request object for later use
+        const decoded = TokenAuthenticator.verifyToken(token);
+        req.user = decoded; 
         next();
     } catch (error) {
-        return Response.errorMessage(res, "Invalid token", 401);
+        return Response.errorMessage(res, 'Invalid token', 401);
     }
 };
 
-export default authenticate;
+
+
+const isAdmin = (req, res, next) => {
+    if (!req.user || !req.user.isAdmin) {
+        return Response.errorMessage(res, 'Unauthorized', 401);
+    }
+    next();
+};
+
+
+
+export  {authenticateToken,isAdmin};

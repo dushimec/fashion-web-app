@@ -18,9 +18,13 @@ class TokenAuthenticator {
         res.header('Authorization', `Bearer ${token}`);
     }
 
-    signToken(data) {
-        const token = jwt.sign(data, process.env.JWT_KEY);
-        return token;
+    static verifyToken(token) {
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_KEY);
+            return decoded;
+        } catch (error) {
+            throw new Error('Invalid token');
+        }
     }
 }
 
