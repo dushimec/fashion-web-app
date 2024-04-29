@@ -8,12 +8,11 @@ class AuthController {
             const newUser = await AuthService.userSignup(req);
             newUser.password = "";
             const { password, ...data } = newUser.toJSON();
-            const token = TokenAuthenticator.tokenGenerator(data);
-            data.token = token;
+           
             Response.successMessage(
                 res,
                 "Account created successfully! Continue to next steps",
-                { token }
+                { data }
             );
         } catch (error) {
             Response.errorMessage(res, "Error occurred while signing up", error); 
@@ -31,12 +30,15 @@ class AuthController {
             }
 
             const { password: _, ...userData } = user.toJSON();
-            const token = TokenAuthenticator.tokenGenerator(userData);
+            const token = TokenAuthenticator.tokenGenerator({
+                id: user._id,
+                email: user.email,
+                isAdmin: user.isAdmin
+            });
             
-            // Set the token in the response headers
             TokenAuthenticator.setTokenInHeaders(res, token);
             
-            Response.successMessage(res, "Login successful", { token });
+            Response.successMessage(res, "Login successful", { userData });
         } catch (error) {
             Response.errorMessage(res, "Error occurred while logging in", error); 
         }
