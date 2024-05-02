@@ -1,12 +1,38 @@
-// ProductService.js
-
 import ProductModel from '../models/productModel';
-import Response from '../helper/Response';
+
+import path from 'path';
+import fs from 'fs';
 
 class ProductService {
-  static async createProduct(productData) {
+  static async createProduct(productData, imageFile) {
     try {
-      const product = await ProductModel.create(productData);
+      const { title, desc, categories, size, color, price } = productData;
+
+      let imagePath = '';
+      if (imageFile) {
+        const uploadDir = path.join(__dirname, '..', 'public', 'images');
+        const imageExtension = imageFile.name.split('.').pop();
+        const fileName = `${Date.now()}.${imageExtension}`;
+        const uploadPath = path.join(uploadDir, fileName);
+
+        if (!fs.existsSync(uploadDir)) {
+          fs.mkdirSync(uploadDir, { recursive: true });
+        }
+
+        await imageFile.mv(uploadPath);
+        imagePath = `/images/${fileName}`;
+      }
+
+      const product = await ProductModel.create({
+        title,
+        desc,
+        imagePath,
+        categories,
+        size,
+        color,
+        price,
+      });
+
       return product;
     } catch (error) {
       throw new Error('Error creating product');
@@ -66,8 +92,6 @@ class ProductService {
       throw new Error('Error fetching product count');
     }
   }
-
-  // Add more product-related methods as needed
 }
 
 export default ProductService;

@@ -1,13 +1,15 @@
-
-
 import ProductService from '../services/productService';
 import Response from '../helper/Response';
 
 class ProductController {
   static async createProduct(req, res) {
     try {
-      const productData = req.body;
-      const product = await ProductService.createProduct(productData);
+      const { body, files } = req;
+      if (!files || !files.image) {
+        
+        return Response.errorMessage(res, 'No image uploaded', new Error('No image uploaded'));
+      }
+      const product = await ProductService.createProduct(body, files.image);
       Response.successMessage(res, 'Product created successfully', product, 201);
     } catch (error) {
       Response.errorMessage(res, 'Error creating product', error);

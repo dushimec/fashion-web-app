@@ -38,7 +38,7 @@ class AuthController {
             
             TokenAuthenticator.setTokenInHeaders(res, token);
             
-            Response.successMessage(res, "Login successful", { userData });
+            Response.successMessage(res, "Login successful", { userData,token }); 
         } catch (error) {
             Response.errorMessage(res, "Error occurred while logging in", error); 
         }

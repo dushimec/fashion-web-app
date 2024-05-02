@@ -1,6 +1,6 @@
 
 
-import TokenAuthenticator from '../helper/TokenAuthenticator';
+import TokenAuthenticator from '../helper/TokentAuthenticator';
 import Response from '../helper/Response';
 
 const authenticateToken = (req, res, next) => {

@@ -6,6 +6,7 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser';
 import { connectDB } from './db/dbConnection';
 import authRoutes from './src/routers/AuthRoutes';
+import productRouter from './src/routers/productRouter';
 
 
 connectDB()
@@ -26,7 +27,9 @@ const corsOptions = {
 app.use(bodyParser.json());
 app.use(cors(corsOptions));
 app.use(cookieParser())
+app.use(express.static('public'));
 
+app.use('/api', productRouter);
 app.use('/auth',authRoutes)
 
 
