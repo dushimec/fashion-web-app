@@ -1,5 +1,3 @@
-
-
 import TokenAuthenticator from '../helper/TokentAuthenticator';
 import Response from '../helper/Response';
 
@@ -13,14 +11,12 @@ const authenticateToken = (req, res, next) => {
 
     try {
         const decoded = TokenAuthenticator.verifyToken(token);
-        req.user = decoded; 
+        req.user = decoded;
         next();
     } catch (error) {
         return Response.errorMessage(res, 'Invalid token', 401);
     }
 };
-
-
 
 const isAdmin = (req, res, next) => {
     if (!req.user || !req.user.isAdmin) {
@@ -29,6 +25,4 @@ const isAdmin = (req, res, next) => {
     next();
 };
 
-
-
-export  {authenticateToken,isAdmin};
+export { authenticateToken, isAdmin };
