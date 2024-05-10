@@ -1,5 +1,4 @@
-import { countProduct, deleteProduct, findUser, findUserById, insert, productFeatured, updateProduct } from "../services/productService";
-
+import { countProduct, deleteProduct, findProduct, findProductById, insert, productFeatured, updateProduct } from "../services/productService";
 
 const insertProduct = async (req, res) => {
     try {
@@ -10,18 +9,18 @@ const insertProduct = async (req, res) => {
     }
 };
 
-const findUserController = async (req, res) => {
+const findProductController = async (req, res) => {
     try {
-        const productList = await findUser(req.query.categories);
+        const productList = await findProduct(req.query.categories);
         res.json(productList);
     } catch (error) {
         res.status(500).send(error.message);
     }
 };
 
-const findUserByIdController = async (req, res) => {
+const findProductByIdController = async (req, res) => {
     try {
-        const product = await findUserById(req.params.id);
+        const product = await findProductById(req.params.id);
         if (!product) {
             res.status(404).json({
                 message: "No product found with this ID",
@@ -84,11 +83,10 @@ const updateProductController = async (req, res) => {
     }
 };
 
-
 export {
     insertProduct,
-    findUserController,
-    findUserByIdController,
+    findProductController,
+    findProductByIdController,
     countProductController,
     productFeaturedController,
     deleteProductController,

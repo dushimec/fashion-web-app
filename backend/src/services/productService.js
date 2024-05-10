@@ -1,6 +1,4 @@
-// Import Product model
 import Product from "../models/product";
-
 
 const insert = async (productData) => {
     try {
@@ -11,7 +9,7 @@ const insert = async (productData) => {
     }
 };
 
-const findUser = async (categories) => {
+const findProduct = async (categories) => {
     try {
         let filter = {};
         if (categories) {
@@ -23,7 +21,7 @@ const findUser = async (categories) => {
     }
 };
 
-const findUserById = async (productId) => {
+const findProductById = async (productId) => {
     try {
         return await Product.findById(productId).populate("category");
     } catch (error) {
@@ -63,11 +61,10 @@ const updateProduct = async (productId, productData) => {
     }
 };
 
-
 export {
     insert,
-    findUser,
-    findUserById,
+    findProduct,
+    findProductById,
     countProduct,
     productFeatured,
     deleteProduct,
