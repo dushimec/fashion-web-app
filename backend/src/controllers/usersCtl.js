@@ -1,12 +1,19 @@
-import Users from "../models/users";
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import { createUser, deleteUser, getUserById, getUsers, loginUser, updateUser } from "../services/userService";
 
-const getUser = async (req, res) => {
+const getUsersController = async (req, res) => {
     try {
-        const user = await Users.find().select("-passwordHash");
-        if (!user || user.length === 0) {
-            res.status(404).json({ success: false, message: "No users found" });
+        const users = await getUsers();
+        res.send(users);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+const getUserByIdController = async (req, res) => {
+    try {
+        const user = await getUserById(req.params.id);
+        if (!user) {
+            res.status(404).json({ success: false, message: "No user found" });
         } else {
             res.send(user);
         }
@@ -15,65 +22,27 @@ const getUser = async (req, res) => {
     }
 };
 
-const getSingle = async (req, res) => {
+const updateUserController = async (req, res) => {
     try {
-        const userId = await Users.findById(req.params.id).select("-passwordHash");
-        if (!userId) {
-            res.status(404).json({ success: false, message: "No user found" });
-        } else {
-            res.send(userId);
-        }
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
-};
-
-const updateUser = async (req, res) => {
-    try {
-        let userUpdate = await Users.findByIdAndUpdate(req.params.id, {
-            name: req.body.name,
-            email: req.body.email,
-            passwordHash: bcrypt.hashSync(req.body.password, 10),
-            phone: req.body.phone,
-            isAdmin: req.body.isAdmin,
-            street: req.body.street,
-            apartment: req.body.apartment,
-            category: req.body.category,
-            zip: req.body.zip,
-            city: req.body.city,
-            country: req.body.country,
-        }, { new: true });
-        res.status(200).json(userUpdate);
+        const updatedUser = await updateUser(req.params.id, req.body);
+        res.status(200).json(updatedUser);
     } catch (error) {
         res.status(404).json({ success: false });
     }
 };
 
-const postUser = async (req, res) => {
+const createUserController = async (req, res) => {
     try {
-        let user = new Users({
-            name: req.body.name,
-            email: req.body.email,
-            passwordHash: bcrypt.hashSync(req.body.password, 10),
-            phone: req.body.phone,
-            isAdmin: req.body.isAdmin,
-            street: req.body.street,
-            apartment: req.body.apartment,
-            category: req.body.category,
-            zip: req.body.zip,
-            city: req.body.city,
-            country: req.body.country,
-        });
-        await user.save();
+        const user = await createUser(req.body);
         res.status(200).json(user);
     } catch (error) {
         res.status(404).json({ success: false });
     }
 };
 
-const deleteUser = async (req, res) => {
+const deleteUserController = async (req, res) => {
     try {
-        const user = await Users.findByIdAndRemove(req.params.id);
+        const user = await deleteUser(req.params.id);
         if (user) {
             res.status(200).json({ success: true, message: "User deleted" });
         } else {
@@ -84,29 +53,15 @@ const deleteUser = async (req, res) => {
     }
 };
 
-const login = async (req, res) => {
+const loginUserController = async (req, res) => {
     try {
-        const user = await Users.findOne({ email: req.body.email });
-        const secret = process.env.my_secret;
-        if (!user) {
-            return res.status(400).send("User not found");
-        }
-        if (user && bcrypt.compareSync(req.body.password, user.passwordHash)) {
-            const token = jwt.sign(
-                {
-                    userId: user.id,
-                    isAdmin: user.isAdmin
-                },
-                secret,
-                { expiresIn: '1d' }
-            );
-            res.status(200).send({ user: user.email, token: token });
-        } else {
-            res.status(400).json({ message: "Password incorrect!!" });
-        }
+        const { email, password } = req.body;
+        const user = await loginUser(email, password);
+        res.status(200).json(user);
     } catch (error) {
         res.status(500).send(error.message);
     }
 };
 
-export { getUser, postUser, deleteUser, getSingle, updateUser, login };
+
+export { getUsersController, getUserByIdController, updateUserController, createUserController, deleteUserController, loginUserController };

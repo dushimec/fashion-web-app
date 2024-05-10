@@ -1,39 +1,29 @@
-import Category from "../models/category";
+import { addCategory, deleteCategory, findCategoryById, getCategoryList, updateCategory } from "../services/categoryServices";
 
-const AddCategory = async (req, res) => {
-    try { 
-        let category = new Category(req.body);
-        category = await category.save();
 
-        if (!category) {
-            return res.status(404).send("The category was not created");
-        }
+
+const addCategoryController = async (req, res) => {
+    try {
+        const category = await addCategory(req.body);
         res.send(category);
     } catch (error) {
         res.status(500).send(error.message);
     }
 };
 
-const GetCategory = async (req, res) => {
+const getCategoryListController = async (req, res) => {
     try {
-        const categoryList = await Category.find();
-
-        if (!categoryList || categoryList.length === 0) {
-            return res.status(404).json({
-                message: 'There are no categories found',
-                success: false
-            });
-        }
+        const categoryList = await getCategoryList();
         res.json(categoryList);
     } catch (error) {
         res.status(500).send(error.message);
     }
 };
 
-const DeleteCategory = async (req, res) => {
+const deleteCategoryController = async (req, res) => {
     try {
-        const category = await Category.findByIdAndRemove(req.params.id);
-        if (category) {
+        const deletedCategory = await deleteCategory(req.params.id);
+        if (deletedCategory) {
             res.status(200).json({ success: true, message: "Category deleted" });
         } else {
             res.status(404).json({ success: false, message: "Category not found" });
@@ -43,30 +33,31 @@ const DeleteCategory = async (req, res) => {
     }
 };
 
-const findCategory = async (req, res) => {
+const findCategoryByIdController = async (req, res) => {
     try {
-        const findCategory = await Category.findById(req.params.id);
-        if (!findCategory) {
+        const category = await findCategoryById(req.params.id);
+        if (!category) {
             res.status(404).json({ success: false, message: "Category not found" });
         } else {
-            res.status(200).json(findCategory);
+            res.status(200).json(category);
         }
     } catch (error) {
         res.status(500).send(error.message);
     }
 };
 
-const updateCategory = async (req, res) => {
+const updateCategoryController = async (req, res) => {
     try {
-        const updateCategory = await Category.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        if (!updateCategory) {
+        const updatedCategory = await updateCategory(req.params.id, req.body);
+        if (!updatedCategory) {
             res.status(404).json({ success: false, message: "Category not updated" });
         } else {
-            res.status(200).json(updateCategory);
+            res.status(200).json(updatedCategory);
         }
     } catch (error) {
         res.status(500).send(error.message);
     }
 };
 
-export { AddCategory, GetCategory, DeleteCategory, findCategory, updateCategory };
+
+export { addCategoryController, getCategoryListController, deleteCategoryController, findCategoryByIdController, updateCategoryController };

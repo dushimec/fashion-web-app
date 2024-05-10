@@ -1,9 +1,10 @@
 import express from 'express';
-import { findOrders, postOrders } from '../controllers/ordersClt';
+import { findOrdersController, postOrdersController } from '../controllers/ordersClt';
 
-const orderRouter = express.Router()
 
-orderRouter.get('/allOrders',findOrders)
-orderRouter.put('/registerOrders',postOrders)
+const orderRouter = express.Router();
+
+orderRouter.get('/allOrders', findOrdersController);
+orderRouter.put('/registerOrders', postOrdersController);
 
 export default orderRouter;

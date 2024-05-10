@@ -1,14 +1,14 @@
 import express from 'express';
-import { countProduct, deleteProduct, findUser, findUserById, insert, productFeatured, updateProduct } from '../controllers/prductCtl';
+import { countProductController, deleteProductController, findUserByIdController, findUserController, insertProduct, productFeaturedController, updateProductController } from '../controllers/prductCtl';
 
-const router = express.Router()
+const productRouter = express.Router();
 
-router.post('/add',insert);
-router.get('/findAll',findUser);
-router.get('/findOne/:id',findUserById);
-router.get('/get/count',countProduct);
-router.get('/get/featured/:count',productFeatured);
-router.delete('/delete/:id',deleteProduct);
-router.put('/update/:id',updateProduct);
+productRouter.post('/add', insertProduct);
+productRouter.get('/findAll', findUserController);
+productRouter.get('/findOne/:id', findUserByIdController);
+productRouter.get('/get/count', countProductController);
+productRouter.get('/get/featured/:count', productFeaturedController);
+productRouter.delete('/delete/:id', deleteProductController);
+productRouter.put('/update/:id', updateProductController);
 
-export default router;
+export default productRouter;
