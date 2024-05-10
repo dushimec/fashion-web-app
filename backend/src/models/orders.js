@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const oderSchema = mongoose.Schema({
     orderItems: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'orderItm',
+        ref: 'OrderItm',
         required: true
     }],
     shippingAddress1: {
@@ -40,7 +40,7 @@ const oderSchema = mongoose.Schema({
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',
+        ref: 'Users',
         
     },
     dateOrdered: {

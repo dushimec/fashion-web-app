@@ -9,17 +9,10 @@ const productSchema = mongoose.Schema({
         type:String,
         required:true
     },
-    richDescription:{
-        type:String,
-        required:true
-    },
     image:{
         type:String,
         required:true
     },
-    images:[{
-        type:String
-    }],
     brand:{
         type:String,
         required:true
@@ -30,7 +23,7 @@ const productSchema = mongoose.Schema({
     },
     category:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'category',
+        ref:'Category',
         required:true
     },
     countinStock:{

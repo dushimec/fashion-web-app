@@ -14,33 +14,13 @@ const userSchema = mongoose.Schema({
         required: true
     },
     phone: {
-        type: Number,
+        type: String,
         required: true
     },
     isAdmin: {
         type: Boolean,
         default: false
-    },
-    street: {
-        type: String,
-        default: ''
-    },
-    apartment: {
-        type: String,
-        default: ''
-    },
-    city: {
-        type: String,
-        default: ''
-    },
-    zip: {
-        type: String,
-        default: ''
-    },
-    country: {
-        type: String,
-        default: ''
-    },
+    }
 
 
 })

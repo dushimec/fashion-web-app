@@ -2,7 +2,8 @@
 import User from "../models/users";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-
+import dotenv from 'dotenv'
+dotenv.config();
 
 const getUsers = async () => {
     try {
@@ -30,24 +31,15 @@ const updateUser = async (userId, userData) => {
 
 const createUser = async (userData) => {
     try {
-        const user = new User({
-            name: userData.name,
-            email: userData.email,
-            passwordHash: bcrypt.hashSync(userData.password, 10),
-            phone: userData.phone,
-            isAdmin: userData.isAdmin,
-            street: userData.street,
-            apartment: userData.apartment,
-            category: userData.category,
-            zip: userData.zip,
-            city: userData.city,
-            country: userData.country,
-        });
-        return await user.save();
+        const user = new User(userData);
+        user.passwordHash = bcrypt.hashSync(userData.passwordHash, 10);
+        await user.save();
+        return user;
     } catch (error) {
         throw error;
     }
 };
+
 
 const deleteUser = async (userId) => {
     try {
@@ -60,7 +52,7 @@ const deleteUser = async (userId) => {
 const loginUser = async (email, password) => {
     try {
         const user = await User.findOne({ email: email });
-        const secret = process.env.my_secret;
+        const secret = process.env.JWT_KEY;
         if (!user) {
             return "User not found";
         }
