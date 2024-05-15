@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@expo-google-fonts/jaldi": "^0.2.3",
+    "design-react-kit": "^5.0.4"
+  }
+}

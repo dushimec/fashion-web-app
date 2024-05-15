@@ -1,0 +1,15 @@
+.contuct-page{
+    height: 100vh;
+    background-color: #ffe2cc;
+    margin-top: 2%;
+    display: flex;
+    flex-direction: initia;
+}
+.contuct-pg{
+    background-color: white;
+    width: 80%;
+    height: 523px;
+    margin-left: 10%;
+    
+
+}
